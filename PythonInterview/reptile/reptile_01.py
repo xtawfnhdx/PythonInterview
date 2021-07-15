@@ -26,21 +26,28 @@ importlib.reload(sys)
 # Some Predefined User Agents
 USER_AGENTS = [
     {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'},
-    {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'},
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'},
     {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)'},
     {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:73.0) Gecko/20100101 Firefox/73.0'},
-    {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'},
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'},
     {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'},
-    {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'},
-    {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36'},
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'},
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36'},
     {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0'},
     {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)'},
     {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)'},
     {'User-Agent': 'Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.5 (like Gecko) (Kubuntu)'},
-    {'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.12) Gecko/20070731 Ubuntu/dapper-security Firefox/1.5.0.12'},
-    {'User-Agent': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.7 (KHTML, like Gecko) Ubuntu/11.04 Chromium/16.0.912.77 Chrome/16.0.912.77 Safari/535.7'},
+    {
+        'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.12) Gecko/20070731 Ubuntu/dapper-security Firefox/1.5.0.12'},
+    {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.7 (KHTML, like Gecko) Ubuntu/11.04 Chromium/16.0.912.77 Chrome/16.0.912.77 Safari/535.7'},
     {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0'},
-    {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}]
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}]
 
 PROXY_IPS = []
 
@@ -235,7 +242,10 @@ def get_book_info(book_url):
     test_rating_string = rating_parent.find('a', href='collections')
     if test_rating_string is None:
         test_rating_string = rating_parent.find('div', {'class': 'rating_sum'}).find('span')
-    if average_rating == ' ' and (test_rating_string.string.find('评价') != -1 or test_rating_string is None):
+    if average_rating == ' ' and (
+            test_rating_string is None or test_rating_string.string is None or
+            test_rating_string.string.find('评价') != -1 or
+            test_rating_string.string.find('暂无') != -1):
         average_rating = 0.0
         raters_count = 0
     else:
@@ -284,16 +294,16 @@ def get_book_comments(book_url, sort_by_time, list_size):
     list_count = 0
     # 最新评论
     if sort_by_time:
-        plain_text = parse_book_url(book_url + "/comments/new")
+        plain_text = parse_book_url(book_url + "/comments/?sort=time&status=P")
     # 最热评论
     else:
-        plain_text = parse_book_url(book_url + "/comments/hot")
+        plain_text = parse_book_url(book_url + "/comments/?sort=new_score&status=P")
 
     soup = BeautifulSoup(plain_text, features="lxml")
-    comments_count = soup.find('span', id='total-comments').string.strip()
+    comments_count = soup.find('h1').string.strip()
     comment_info['commentsCount'] = comments_count
     if re.findall(r'\d+', comments_count) != '0':
-        comments_container = soup.find('div', {'id': 'comments', 'class': 'comment-list'})
+        comments_container = soup.find('div', {'class': 'comment-list new_score'})
         for comments_parent in comments_container.find_all('li', {'class': 'comment-item'}):
             if list_count >= list_size or comments_parent.find('p', {'class': 'blank-tip'}) is not None:
                 break
@@ -363,7 +373,7 @@ def export_data_to_json(list, book_tag, file_path_prefix, is_basic_tag):
         json_path = file_path_prefix + "/" + book_tag + "_0" + SUFFIX_JSON
     else:
         json_path = file_path_prefix + "/" + book_tag + SUFFIX_JSON
-    with open(json_path, "w") as f:
+    with open(json_path, "w", encoding="utf-8") as f:
         f.write(json.dumps(list, ensure_ascii=False))
         # json.dump(list, f)
 
@@ -374,6 +384,7 @@ if __name__ == '__main__':
     # https://www.douban.com/tag//?source=topic_search
     # book_tag_lists = ['香港', '台湾', '北京', '上海', '日本', '韩国', '英国', '意大利', '清迈', '巴黎', '欧洲', '火车']
     # book_tag_lists = ['哲学', '建筑', '古建筑', '寺庙', '宗教', '人文', '历史', '博物馆']
-    book_tag_lists = ['拜占庭', '古巴比伦', '古埃及']
+    # book_tag_lists = ['拜占庭', '古巴比伦', '古埃及']
+    book_tag_lists = ['古埃及']
     # 只测试爬取2页
     crawl_by_tags(book_tag_lists, 2, False)
