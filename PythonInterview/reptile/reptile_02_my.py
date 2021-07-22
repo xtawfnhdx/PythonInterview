@@ -1,5 +1,7 @@
 import os
+import json
 import random
+from selenium import webdriver
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
@@ -34,20 +36,58 @@ USER_AGENTS = [
 
 
 def download_page_by_tag(tag):
-    zcoolUrl = "https://www.zcool.com.cn/search/content?word=" + quote(tag)
-    soupUserPageList = get_url_model(zcoolUrl)
-    soupUserPageList.find('div', {'id': 'search-card-list'}).find_all('div', {'class': 'card-box new-card-box'})
-    for soup in soupUserPageList:
-        userPageUrl=soup.find('a').get('href')
-        userPageSoup=get_url_model(userPageUrl)
-        down_page_by_pagemodel
-def down_page_by_pagemodel(pagesoup):
-    if pagesoup.find('div',{'class':'login-close'}):
+    """
+    根据标签下载当前页面所有图片
+    :param tag:标签
+    :return:
+    """
+    # 验证发现站酷的登录界面，只是一个iframe弹层，可以忽略弹层
+    page = 1
+    tarMsg = quote(tag)
+    zcoolUrl = f'https://www.zcool.com.cn/search/content.json?word={tarMsg}&cate=0&type=0&recommendLevel=0&time=0&hasVideo=0&city=0&college=0&sort=5&limit=20&column=4&page={page}'
+    request = Request(zcoolUrl, headers=random.choice(USER_AGENTS))
+    ss = str(urlopen(request).read(), 'utf-8')
+    pageMsglist = json.loads(ss)
+    for pageMsg in pageMsglist['data']['data']:
+        pageMsgSub = get_url_model(pageMsg['object']['pageUrl'])
+        aaaa=pageMsgSub.find('div',{'class':'work-show-box mt-40 js-work-content'}).find_all('div',{'class':'reveal-work-wrap js-sdata-box text-center'})
+        for aa in aaaa:
+            print(aa.find('img').get('src'))
+
+    #
+    # soupSearchPageList = get_url_model(zcoolUrl)
+    # userPageList = soupSearchPageList.find('div', {'id': 'search-card-list'}). \
+    #     find_all('div', {'class': 'card-box new-card-box'})
+    # for soup in userPageList:
+    #     userPageUrl = soup.find('a').get('href')
+    #     down_page_by_pageurl(userPageUrl)
+    #
+
+
+def down_page_by_pageurl(pageUrl):
+    pagesoup = get_url_model(pageUrl)
+    userName = pagesoup.find('p', {'class': 'author-info-title'}).find('a')[0].text
+    pageName = pagesoup.find('div', {'class': 'details-contitle-box'}).find('h2').text.split(' ')[0]
+    pageListSoup = pagesoup.find_all('div', {'class': 'reveal-work-wrap js-sdata-box text-center'})
+    for page in pageListSoup:
+        page.find('img').get('src')
+
+
+def save_page_by_url(file, url):
+    data = urlopen(url).read()
+    with file('./' + file + '/abc.jpg', 'wb') as f:
+        f.write(data)
+        f.close
 
 
 def get_url_model(url):
     try:
-        req = Request(url, random.choice(USER_AGENTS))
+        # driver = webdriver.Chrome()
+        # driver.maximize_window()
+        # driver.get(url)
+        # htmlStr = driver.page_source
+
+        req = Request(url, headers=random.choice(USER_AGENTS))
         htmlFlow = urlopen(req).read()
         htmlStr = str(htmlFlow, 'utf-8')
         soup = BeautifulSoup(htmlStr, 'lxml')
@@ -61,5 +101,5 @@ def get_url_model(url):
 if __name__ == '__main__':
     if not os.path.exists(FILE_LOCLA_PATH):
         os.makedirs(FILE_LOCLA_PATH)
-    tag = input('请输入要下载的图片标签内容')
-    download_page_by_tag(tag)
+    # tag = input('请输入要下载的图片标签内容')
+    download_page_by_tag('世界')
