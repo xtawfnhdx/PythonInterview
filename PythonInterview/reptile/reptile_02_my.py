@@ -3,7 +3,7 @@ import json
 import random
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen,urlretrieve
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 
@@ -52,7 +52,8 @@ def download_page_by_tag(tag):
         pageMsgSub = get_url_model(pageMsg['object']['pageUrl'])
         aaaa=pageMsgSub.find('div',{'class':'work-show-box mt-40 js-work-content'}).find_all('div',{'class':'reveal-work-wrap js-sdata-box text-center'})
         for aa in aaaa:
-            print(aa.find('img').get('src'))
+            save_img_by_url(aa.find('img').get('src'))
+            # print()
 
     #
     # soupSearchPageList = get_url_model(zcoolUrl)
@@ -62,6 +63,10 @@ def download_page_by_tag(tag):
     #     userPageUrl = soup.find('a').get('href')
     #     down_page_by_pageurl(userPageUrl)
     #
+
+def save_img_by_url(imgurl):
+    imgName=imgurl.split('/')[-1].split('.')[0]
+    urlretrieve(imgurl,'./'+FILE_LOCLA_PATH+'/'+imgName+'.jpg')
 
 
 def down_page_by_pageurl(pageUrl):
@@ -103,3 +108,4 @@ if __name__ == '__main__':
         os.makedirs(FILE_LOCLA_PATH)
     # tag = input('请输入要下载的图片标签内容')
     download_page_by_tag('世界')
+    #save_img_by_url('https://img.zcool.cn/community/01d23260edc14d11013f4720ec2cb8.jpg@1280w_1l_2o_100sh.jpg')
