@@ -1,9 +1,10 @@
 import os
 import json
 import random
-from selenium import webdriver
+import shutil
+import re
 from bs4 import BeautifulSoup
-from urllib.request import Request, urlopen,urlretrieve
+from urllib.request import Request, urlopen, urlretrieve
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 
@@ -35,63 +36,67 @@ USER_AGENTS = [
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}]
 
 
-def download_page_by_tag(tag):
+def download_page_by_tag(tag, page=1, totalcount=5):
     """
     根据标签下载当前页面所有图片
-    :param tag:标签
+    :param tag: 标签
+    :param page: 页数
+    :param totalcount:最大访问请求的列表数
     :return:
     """
-    # 验证发现站酷的登录界面，只是一个iframe弹层，可以忽略弹层
-    page = 1
+    nowNum = 1
+
+    # 验证发现站酷内容是动态json加载出来的，直接请求接口获取数据
     tarMsg = quote(tag)
     zcoolUrl = f'https://www.zcool.com.cn/search/content.json?word={tarMsg}&cate=0&type=0&recommendLevel=0&time=0&hasVideo=0&city=0&college=0&sort=5&limit=20&column=4&page={page}'
     request = Request(zcoolUrl, headers=random.choice(USER_AGENTS))
-    ss = str(urlopen(request).read(), 'utf-8')
-    pageMsglist = json.loads(ss)
-    for pageMsg in pageMsglist['data']['data']:
-        pageMsgSub = get_url_model(pageMsg['object']['pageUrl'])
-        aaaa=pageMsgSub.find('div',{'class':'work-show-box mt-40 js-work-content'}).find_all('div',{'class':'reveal-work-wrap js-sdata-box text-center'})
-        for aa in aaaa:
-            save_img_by_url(aa.find('img').get('src'))
-            # print()
+    responseDataStr = str(urlopen(request).read(), 'utf-8')
+    responseDataList = json.loads(responseDataStr)
 
-    #
-    # soupSearchPageList = get_url_model(zcoolUrl)
-    # userPageList = soupSearchPageList.find('div', {'id': 'search-card-list'}). \
-    #     find_all('div', {'class': 'card-box new-card-box'})
-    # for soup in userPageList:
-    #     userPageUrl = soup.find('a').get('href')
-    #     down_page_by_pageurl(userPageUrl)
-    #
+    for userPageUrlModel in responseDataList['data']['data']:
+        if nowNum > totalcount:
+            return
+        if 'username' not in str(userPageUrlModel):
+            continue
 
-def save_img_by_url(imgurl):
-    imgName=imgurl.split('/')[-1].split('.')[0]
-    urlretrieve(imgurl,'./'+FILE_LOCLA_PATH+'/'+imgName+'.jpg')
+        userName = userPageUrlModel['object']['creatorObj']['username']
+        userId = userPageUrlModel['object']['creatorObj']['id']
+        pageName = re.sub('<[^<]+?>', '', userPageUrlModel['object']['title']).replace('\n', '').strip()
 
+        print(f'当前处理用户为：{userName} 的 {pageName}')
+        # 清理文件夹，重新创建
+        folderStr = f'./{FILE_LOCLA_PATH}/{userId}_{userName}_{pageName}'
+        if os.path.exists(folderStr):
+            shutil.rmtree(folderStr)
+        os.makedirs(folderStr)
 
-def down_page_by_pageurl(pageUrl):
-    pagesoup = get_url_model(pageUrl)
-    userName = pagesoup.find('p', {'class': 'author-info-title'}).find('a')[0].text
-    pageName = pagesoup.find('div', {'class': 'details-contitle-box'}).find('h2').text.split(' ')[0]
-    pageListSoup = pagesoup.find_all('div', {'class': 'reveal-work-wrap js-sdata-box text-center'})
-    for page in pageListSoup:
-        page.find('img').get('src')
+        userPageSoup = get_url_model(userPageUrlModel['object']['pageUrl'])
+        imgModelList = userPageSoup.find('div', {'class': 'work-show-box mt-40 js-work-content'}).find_all('div', {
+            'class': 'reveal-work-wrap js-sdata-box text-center'})
+
+        for imgModel in imgModelList:
+            save_img_by_url(imgModel.find('img').get('src'), folderStr)
+        nowNum = nowNum + 1
 
 
-def save_page_by_url(file, url):
-    data = urlopen(url).read()
-    with file('./' + file + '/abc.jpg', 'wb') as f:
-        f.write(data)
-        f.close
+def save_img_by_url(imgurl, folder):
+    """
+    保存图片
+    :param imgurl:图片地址
+    :param folder: 文件夹路劲
+    :return:
+    """
+    imgName = imgurl.split('/')[-1].split('.')[0]
+    urlretrieve(imgurl, f'{folder}/{imgName}.jpg')
 
 
 def get_url_model(url):
+    """
+    获取url对应的网页数据
+    :param url:
+    :return:
+    """
     try:
-        # driver = webdriver.Chrome()
-        # driver.maximize_window()
-        # driver.get(url)
-        # htmlStr = driver.page_source
-
         req = Request(url, headers=random.choice(USER_AGENTS))
         htmlFlow = urlopen(req).read()
         htmlStr = str(htmlFlow, 'utf-8')
@@ -106,6 +111,6 @@ def get_url_model(url):
 if __name__ == '__main__':
     if not os.path.exists(FILE_LOCLA_PATH):
         os.makedirs(FILE_LOCLA_PATH)
-    # tag = input('请输入要下载的图片标签内容')
-    download_page_by_tag('世界')
-    #save_img_by_url('https://img.zcool.cn/community/01d23260edc14d11013f4720ec2cb8.jpg@1280w_1l_2o_100sh.jpg')
+    tag = input('请输入要下载的图片标签内容')
+    download_page_by_tag(tag, 1, 10)
+    # download_page_by_tag('青春', 1, 10)
