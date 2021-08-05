@@ -3,7 +3,7 @@
 """
 
 from abc import ABC, abstractmethod
-
+from typing import List
 
 class Person(ABC):
 
@@ -24,7 +24,7 @@ class P1(Person):
     def __init__(self, name, job):
         self.name = name
         self.job = job
-        self.child = []
+        self.child: List[Person] = []
 
     def add(self, p: Person):
         self.child.append(p)
