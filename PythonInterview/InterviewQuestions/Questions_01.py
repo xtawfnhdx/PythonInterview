@@ -241,3 +241,69 @@ test31_list1.sort()
 print(test31_list1)
 test31_list1.append(test31_list2)
 print(test31_list1)
+
+# 32 用python删除文件和用linux命令删除文件方法
+print('32 用python删除文件和用linux命令删除文件方法')
+print(f'python方法：os.remove')
+print(f'linux:rm')
+
+# 33 log日志中，我们需要用时间戳记录error,warning等的发生时间，请用datetime模块打印当前时间戳 “2018-04-01 11:38:54”
+print('33 log日志中，我们需要用时间戳记录error,warning等的发生时间，请用datetime模块打印当前时间戳 “2018-04-01 11:38:54”')
+import datetime
+
+# strftime 时分秒(H M S)都要大写
+test32_str1 = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+print(test32_str1)
+
+# 33 数据库优化查询方法
+
+# 34 请列出你会的任意一种统计图(条形图，折线图等)绘制的开源库，第三方也行
+print('34 请列出你会的任意一种统计图(条形图，折线图等)绘制的开源库，第三方也行')
+print('pyecharts', 'matplotlib')
+
+# 35 写一段自定义异常代码
+print('35 写一段自定义异常代码')
+
+
+def def35():
+    try:
+        raise IndexError('测试测试')
+    except IndexError as i:
+        print(i)
+
+
+def35()
+
+# 36 正则表达式匹配中，(.*)和(.*?)匹配的区别？
+print('36 正则表达式匹配中，(.*)和(.*?)匹配的区别？')
+print('(.*) 是贪婪匹配，尽可能多的往后面匹配')
+print('(.*？) 非贪婪匹配，尽可能少的匹配')
+import re
+
+test36_str = '<a>哈哈</a><a>呵呵</a>'
+test36_re1 = re.findall("<a>(.*)</a>", test36_str)
+test36_re2 = re.findall("<a>(.*?)</a>", test36_str)
+print(test36_re1)
+print(test36_re2)
+
+# 38 简述Django的orm
+print('38 简述Django的orm')
+print('后续补充')
+
+# 39 [[1,2],[3,4],[5,6]]一行代码展开该列表，得出[1,2,3,4,5,6]
+print('39 [[1,2],[3,4],[5,6]]一行代码展开该列表，得出[1,2,3,4,5,6]')
+test39_list1 = [[1, 2], [3, 4], [5, 6]]
+# 使用列表推导式 for i in a
+test39_list2 = [j for i in test39_list1 for j in i]
+print(test39_list2)
+
+# 40 x="abc",y="def",z=["d","e","f"],分别求出x.join(y)和x.join(z)返回的结果
+print('40 x="abc",y="def",z=["d","e","f"],分别求出x.join(y)和x.join(z)返回的结果')
+test40_str1='abc'
+test40_str2='def'
+test40_list1=['d','e','f']
+print(test40_str1.join(test40_str2))
+test40_str1='abc'
+test40_str2='def'
+test40_list1=['d','e','f']
+print(test40_str1.join(test40_list1))
