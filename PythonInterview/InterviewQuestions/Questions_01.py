@@ -299,11 +299,176 @@ print(test39_list2)
 
 # 40 x="abc",y="def",z=["d","e","f"],分别求出x.join(y)和x.join(z)返回的结果
 print('40 x="abc",y="def",z=["d","e","f"],分别求出x.join(y)和x.join(z)返回的结果')
-test40_str1='abc'
-test40_str2='def'
-test40_list1=['d','e','f']
+test40_str1 = 'abc'
+test40_str2 = 'def'
+test40_list1 = ['d', 'e', 'f']
 print(test40_str1.join(test40_str2))
-test40_str1='abc'
-test40_str2='def'
-test40_list1=['d','e','f']
+test40_str1 = 'abc'
+test40_str2 = 'def'
+test40_list1 = ['d', 'e', 'f']
 print(test40_str1.join(test40_list1))
+
+# 41 举例说明异常模块中try except else finally的相关意义
+print('41 举例说明异常模块中try except else finally的相关意义')
+
+# 42 python中交换两个数值
+print('42 python中交换两个数值')
+test42_i1, test42_i2 = 3, 4
+print(test42_i1, test42_i2)
+test42_i1, test42_i2 = test42_i2, test42_i1
+print(test42_i1, test42_i2)
+
+# 43 举例说明zip（）函数用法
+print('43 举例说明zip（）函数用法')
+test43_list1 = [1, 2, 3, 4, 5]
+test43_list2 = ['a', 'b', 'c', 'd', 'e']
+test43_res1 = zip(test43_list1, test43_list2)
+print(list(test43_res1))
+
+# 44 a="张明 98分"，用re.sub，将98替换为100
+print('44 a="张明 98分"，用re.sub，将98替换为100')
+test44_str1 = "张明 98分"
+
+# 45 写5条常用sql语句
+
+# 46 a="hello"和b="你好"编码成bytes类型
+print('46 a="hello"和b="你好"编码成bytes类型')
+test46_str1 = "hello"
+test46_str2 = "你好"
+print(test46_str1.encode())
+print(test46_str2.encode(encoding='utf-8'))
+
+# 47 [1,2,3]+[4,5,6]的结果是多少？
+print('47 [1,2,3]+[4,5,6]的结果是多少？')
+test47_list1 = [1, 2, 3]
+test47_list2 = [4, 5, 6]
+# +与extend相同
+print(test47_list1 + test47_list2)
+test47_list1.extend(test47_list2)
+print(test47_list1)
+
+# 48 提高python运行效率的方法
+print('48 提高python运行效率的方法')
+print(r'使用生成器，节约内存')
+print(r'循环代码优化，避免过多重复代码')
+print(r'多线程，多进程，协程')
+print(r'多个判断，命中率高的放到最前面')
+
+# 49 简述mysql和redis区别
+print('49 简述mysql和redis区别')
+print('存储方式不一样，'
+      'mysql是关系数据库，数据主要固化到磁盘中'
+      'redis是以键值对存储的菲关系数据库，数据主要保存在内存中')
+
+# 50 遇到bug如何处理
+
+# 51 正则匹配，匹配日期2018-03-20
+
+# 52 list=[2,3,5,4,9,6]，从小到大排序，不许用sort，输出[2,3,4,5,6,9]
+print('52 list=[2,3,5,4,9,6]，从小到大排序，不许用sort，输出[2,3,4,5,6,9]')
+test52_list1 = [2, 3, 5, 4, 9, 6]
+test52_set = set(test52_list1)
+test52_list2 = list(test52_set)
+print(test52_list2)
+
+# 53 写一个单列模式
+print('53 写一个单列模式')
+
+
+class Cls53():
+    _cls = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._cls:
+            _cls = super().__new__(cls)
+        return cls._cls
+
+
+test53_t1 = Cls53()
+test53_t2 = Cls53()
+print(id(test53_t1))
+print(id(test53_t2))
+
+# 54 保留两位小数
+test54_float = 3.67893
+print('%0.2f' % test54_float)
+print(round(test54_float, 2))
+
+# 55 求三个方法打印结果
+
+# 56 列出常见的状态码和意义
+
+# 57 分别从前端、后端、数据库阐述web项目的性能优化
+print('57 分别从前端、后端、数据库阐述web项目的性能优化')
+
+# 58 使用pop和del删除字典中的"name"字段，dic={"name":"zs","age":18}
+print('58 使用pop和del删除字典中的"name"字段，dic={"name":"zs","age":18}')
+test58_dic1 = {"name": "zs", "age": 18, "sex": "woman", "height": "170"}
+test58_dic1.pop('age')
+print(test58_dic1)
+del test58_dic1["sex"]
+print(test58_dic1)
+
+# 59 列出常见MYSQL数据存储引擎
+print('59 列出常见MYSQL数据存储引擎')
+
+# 60 计算代码运行结果，zip函数历史文章已经说了，得出[("a",1),("b",2)，("c",3),("d",4),("e",5)]
+print('60 计算代码运行结果，zip函数历史文章已经说了，得出[("a",1),("b",2)，("c",3),("d",4),("e",5)]')
+
+# 61 简述同源策略
+print('61 简述同源策略')
+print('协议相同(http https),域名相同，端口相同')
+
+# 62 简述 cookie和session的区别
+print('62 简述 cookie和session的区别')
+
+# 63 简述多线程，多进程
+print('63 简述多线程，多进程')
+
+# 64 简述any()和all()方法
+print('64 简述any()和all()方法')
+print('any() 迭代器中有一个为真，即为真')
+print('all() 迭代器中全为真，即为真')
+
+# 65 IOError、AttributeError、ImportError、IndentationError、IndexError、KeyError、SyntaxError、NameError分别代表什么异常
+print('65 IOError、AttributeError、ImportError、IndentationError、IndexError、KeyError、SyntaxError、NameError分别代表什么异常')
+print(
+    'IOError:输入输出异常', '\r\n',
+    'AttributeError:访问对象一个不存在的属性', '\r\n',
+    'ImportError:无法引入模块或者包，基本都是路径问题', '\r\n',
+    'IndentationError:语法错误，代码没有正确对齐', '\r\n',
+    'IndexError:下标索引超出限制', '\r\n',
+    'KeyError:视图访问字典中不存在的键', '\r\n',
+    'SyntaxError:Python代码逻辑语法出错，不能执行', '\r\n',
+    'NameError：使用了一个还未赋值的对象变量')
+
+# 66 python copy 和 deepcopy的区别
+print('66 python copy 和 deepcopy的区别')
+print('copy:浅复制，引用数据复制的是引用地址')
+print('deepcopy：深复制，引用数据直接赋值数据本身')
+
+# 67 列出几种魔法方法并简要介绍用途
+print('67 列出几种魔法方法并简要介绍用途')
+print('__new__')
+print('__init(self)__')
+print('__class__  获取已知对象的类')
+print('__str__ 将对象转换成字符串')
+print('__del__ 对象调用结束以后，垃圾回收调用该魔法函数，来释放资源')
+print('__hash__ 返回哈希值')
+
+# 68
+
+# 69 请将[i for i in range(3)] 改成生成器
+print('69 请将[i for i in range(3)] 改成生成器')
+test69_iter2 = (i for i in range(10))
+print(type(test69_iter2))
+print(test69_iter2.__next__())
+print(next(test69_iter2))
+for x in test69_iter2:
+    print(x)
+
+print(list(i for i in range(10)))
+print(tuple(i for i in range(10)))
+
+# 70 a = " hehheh ",去除首尾空格
+print('70 a = " hehheh ",去除首尾空格')
