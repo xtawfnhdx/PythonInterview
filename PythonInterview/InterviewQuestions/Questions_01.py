@@ -472,3 +472,133 @@ print(tuple(i for i in range(10)))
 
 # 70 a = " hehheh ",去除首尾空格
 print('70 a = " hehheh ",去除首尾空格')
+test70_str1 = " hehheh "
+print(test70_str1.strip())
+
+# 71 举例sort和sorted对列表排序，list=[0,-1,3,-10,5,9]
+print('71 举例sort和sorted对列表排序，list=[0,-1,3,-10,5,9]')
+test71_list1 = [0, -1, 3, -10, 5, 9]
+test71_list2 = sorted(test71_list1)
+print(test71_list1, test71_list2)
+
+test71_list1.sort()
+print(test71_list1)
+
+# 72 对list排序foo = [-5,8,0,4,9,-4,-20,-2,8,2,-4],使用lambda函数从小到大排序
+print('72 对list排序foo = [-5,8,0,4,9,-4,-20,-2,8,2,-4],使用lambda函数从小到大排序')
+test72_list1 = [-5, 8, 0, 4, 9, -4, -20, -2, 8, 2, -4]
+test72_gen1 = sorted(test72_list1, key=lambda x: x)
+print(test72_gen1)
+
+# 73 使用lambda函数对list排序foo = [-5,8,0,4,9,-4,-20,-2,8,2,-4]，输出结果为 [0,2,4,8,8,9,-2,-4,-4,-5,-20]，正数从小到大，负数从大到小
+print('73 使用lambda函数对list排序foo = [-5,8,0,4,9,-4,-20,-2,8,2,-4]，输出结果为 [0,2,4,8,8,9,-2,-4,-4,-5,-20]，正数从小到大，负数从大到小')
+test73_list1 = [-5, 8, 0, 4, 9, -4, -20, -2, 8, 2, -4]
+test73_gen1 = sorted(test73_list1, key=lambda x: (x < 0, abs(x)))
+print(test73_gen1)
+test73_gen2 = sorted(test73_list1, key=lambda x: abs(x))
+print(test73_gen2)
+
+# 74 列表嵌套字典的排序，分别根据年龄和姓名排序
+print('74 列表嵌套字典的排序，分别根据年龄和姓名排序')
+test74_list1 = [{"name": "zs", "age": 19}, {"name": "ll", "age": 54}, {"name": "wa", "age": 17},
+                {"name": "df", "age": 23}]
+
+test74_gen1 = sorted(test74_list1, key=lambda x: x["name"])
+test74_gen2 = sorted(test74_list1, key=lambda x: x["age"])
+print(test74_gen1)
+print(test74_gen2)
+
+# 75 列表嵌套元组，分别按字母和数字排序
+print('75 列表嵌套元组，分别按字母和数字排序')
+test75_tuple1 = [('sz', 13), ('ab', 24), ('ed', 56), ('hi', 12)]
+test75_gen1 = sorted(test75_tuple1, key=lambda x: x[0], reverse=True)
+test75_gen2 = sorted(test75_tuple1, key=lambda x: x[1], reverse=True)
+print(test75_gen1)
+print(test75_gen2)
+
+# 76 列表嵌套列表排序，年龄数字相同怎么办？
+print('76 列表嵌套列表排序，年龄数字相同怎么办？')
+test76_list1 = [('sz', 13), ('ab', 24), ('ed', 56), ('hi', 12), ('hr', 24), ('as', 24), ]
+# 只针对数字排序
+test76_gen1 = sorted(test76_list1, key=lambda x: (x[1]))
+# 针对数字排序，相同的时候，再针对字母排序
+test76_gen2 = sorted(test76_list1, key=lambda x: (x[1], x[0]))
+print(test76_gen1)
+print(test76_gen2)
+
+# 77 根据键对字典排序(方法1，zip函数)
+print('77 根据键对字典排序(方法1，zip函数)')
+test77_dict1 = {'name': 'zhangsan', 'sex': 'man', 'city': 'bj'}
+test77_list1 = zip(test77_dict1.keys(), test77_dict1.values())
+test77_gen1 = sorted(test77_list1, key=lambda x: x[0])
+test77_dict2 = {x[0]: x[1] for x in test77_gen1}
+print(test77_dict2)
+
+# 78 根据键对字典排序(方法2，不用zip函数)
+print('78 根据键对字典排序(方法2，不用zip函数)')
+test78_dict1 = {'name': 'zhangsan', 'sex': 'man', 'city': 'bj'}
+print(type(test78_dict1.items()), ':', test78_dict1.items())
+# 老写法
+# test78_list2 = [(x, y) for x, y in test78_dict1.items()]
+# test78_gen1 = sorted(test78_list2, key=lambda x: x[0])
+# 新写法 test78_dict1本来就是可迭代对象，不需要在转换为list
+test78_gen1 = sorted(test78_dict1.items(), key=lambda x: x[0])
+test78_dict2 = {x[0]: x[1] for x in test78_gen1}
+print(test78_dict2)
+
+# 79 列表推导式 字典推导式 生成器
+print('79 列表推导式 字典推导式 生成器')
+test79_list1 = [i for i in range(10)]
+print('列表推导式', test79_list1)
+test79_dic1 = {i: random.randint(11, 20) for i in range(1, 10)}
+print('字典推导式', test79_dic1)
+test79_gen1 = (i for i in range(10))
+print('生成器', test79_gen1)
+print('生成器具体的值', list(test79_gen1))
+
+# 80 最后出一道检验题目，根据字符串长度排序，看排序是否灵活运用
+print('80 最后出一道检验题目，根据字符串长度排序，看排序是否灵活运用')
+test80_list1 = ['ab', 'abc', 'a', 'jekg']
+# 长度降序排序
+test80_list2 = sorted(test80_list1, key=lambda x: len(x), reverse=True)
+print(test80_list2)
+test80_list1 = ['ab', 'abc', 'a', 'jekg']
+test80_list1.sort(key=len, reverse=True)
+print(test80_list1)
+
+# 81 举例说明SQL注入和解决办法
+print('81 举例说明SQL注入和解决办法')
+
+# 82 s="info:xiaoZhang 33 shandong",用正则切分字符串输出['info', 'xiaoZhang', '33', 'shandong']
+
+# 83 正则匹配以http://163.com结尾的邮箱
+
+# 84 递归求和
+print('84 递归求和')
+
+
+def deftest84(num):
+    counts = 0
+    if num == 1:
+        return num
+    else:
+        counts = num + deftest84(num - 1)
+    return counts
+
+
+test84_int = deftest84(10)
+print('递归求值', test84_int)
+
+# 85 python字典和json字符串相互转化方法
+print('85 python字典和json字符串相互转化方法')
+import json
+
+# 核心是json模块的 drmps 和 loads 函数功能
+test85_dict1 = {'name': 'zhangsan', 'sex': 'man', 'city': 'bj'}
+test85_str1 = json.dumps(test85_dict1)
+print('字典转字符串：', type(test85_str1), test85_str1)
+test85_dict2 = json.loads(test85_str1)
+print('字符串转字典：', type(test85_dict2), test85_dict2)
+
+# 86 MyISAM 与 InnoDB 区别
+print('86 MyISAM 与 InnoDB 区别')
