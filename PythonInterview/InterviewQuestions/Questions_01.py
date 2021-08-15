@@ -1301,3 +1301,78 @@ print(int(1.6))
 
 # 96 简述乐观锁和悲观锁
 print('96 简述乐观锁和悲观锁')
+# 乐观锁：基于查询大于更新的基准，增加一个递增变量，每次读取先读取递增变量，重新更新的时候，判断递增变量是否与之前查询到的一致，才更新
+# 悲观锁：悲观态度，认为更新很容易出错，每次执行前，都加锁，只能同时一个操作操作数据
+
+# 97 r、r+、rb、rb+文件打开模式区别
+print('97 r、r+、rb、rb+文件打开模式区别')
+print('r 只读模式打开')
+print('w 写入模式打开')
+print('rw 读写模式打开')
+print('rb 字节流格式打开')
+print('a 追加模式打开')
+print('*+ 上述模式全部增加+,则变为读写模式')
+
+# 98 Linux命令重定向> 和 >>
+print('98 Linux命令重定向> 和 >>')
+print('> 表示输出到哪里，会覆盖原有文件')
+print('>> 表示追加，会追加到原有文件的末尾')
+
+# 99 正则
+
+# 100 Python 传参数是传值还是传地址？
+print('100 Python 传参数是传值还是传地址？')
+# python 以传递地址的方式进行参数传递
+# 如果是不可变类型(数字，字符串，元组)应为变量不可修改，所以直接传递变量的地址
+# 如果是可变类型，直接传入参数地址更有效
+
+# 101 求两个列表的交集、差集、并集
+print('101 求两个列表的交集、差集、并集')
+test101_list1 = [1, 2, 3, 4, 5, 6]
+test101_list2 = [2, 4, 6, 7, 9, 78]
+# 有两种方式
+# 第一种是用set的集合运算法
+# 第二种方式为set集合的方法
+# 方式一 &:交集 |:并集 -:差集
+print('交集：', list(set(test101_list1) & set(test101_list2)))
+print('并集：', list(set(test101_list1) | set(test101_list2)))
+print('差集：', list(set(test101_list1) - set(test101_list2)))
+
+print('方法二')
+print('交集：', list(set(test101_list1).intersection(set(test101_list2))))
+print('并集：', list(set(test101_list1).union(set(test101_list2))))
+print('差集：', list(set(test101_list1).difference(set(test101_list2))))
+
+# 102 生成0-100的随机数
+print('102 生成0-100的随机数')
+print(int(random.random() * 100))
+print(random.randint(0, 101))
+
+# 103 lambda匿名函数的好处
+print('103 lambda匿名函数的好处')
+print('精简代码，省去了定义函数，省去了for循环')
+
+# 104 常见的网络传输协议
+print('104 常见的网络传输协议')
+test104_list = ['http', 'https', 'tcp', 'udp', 'ftp']
+print('常见的网络传输协议', test104_list)
+
+#105 单引号，双引号，三引号的用法
+print('105 单引号，双引号，三引号的用法')
+print('单引号和双引号使用没有差别')
+print('三引号通常直接书写多行，通常用于大段文字')
+
+#106 python垃圾回收机制
+print('106 python垃圾回收机制')
+print('python 垃圾回收机制，主要运用引用为0的操作，当一个对象的引用为0是，执行删除该引用对用的实体并回收操作')
+
+#107
+
+#108 python中读取Excel文件的方法
+print('108 python中读取Excel文件的方法')
+print('应用pandas库')
+
+#109 简述多线程 多进程
+
+#110 python正则中search和match
+
